@@ -5,8 +5,10 @@ services:
             context: ./docker
         ports:
             - "80:80"
+            - "8000:8000"
         volumes:
             - .:/var/www/html
+        command: php artisan octane:start --watch --workers=2 --server=swoole --host=0.0.0.0 --port=80
 
     mysql:
         image: mysql:8

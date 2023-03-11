@@ -5,8 +5,13 @@ RUN apt-get update
 RUN apt-get install -y \
     pkg-config  \
     libzip-dev libmemcached-dev \
+    && pecl install swoole \
     && pecl install memcached-3.2.0 \
-    && docker-php-ext-enable memcached
+    && docker-php-ext-enable memcached swoole \
+    && curl -sLS https://deb.nodesource.com/setup_18.x | bash - \
+    && apt-get install -y nodejs \
+    && npm install -g npm \
+    && apt-get update
 
 RUN docker-php-ext-install \
     mysqli \
