@@ -23,6 +23,7 @@ return new class extends Migration
             $table->double('wind_speed');
             $table->string('city');
             $table->string('country');
+            $table->string('icon');
             $table->dateTime('datetime');
             $table->timestamps();
         });

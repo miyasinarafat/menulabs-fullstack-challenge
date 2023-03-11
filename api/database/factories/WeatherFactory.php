@@ -35,6 +35,7 @@ class WeatherFactory extends Factory
             'wind_speed' => $this->faker->randomNumber(2),
             'city' => $this->faker->city(),
             'country' => $this->faker->countryCode(),
+            'icon' => $this->faker->randomNumber(),
             'datetime' => $this->faker->dateTime(),
         ];
     }

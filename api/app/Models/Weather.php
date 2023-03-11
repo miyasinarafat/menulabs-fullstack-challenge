@@ -19,6 +19,7 @@ class Weather extends Model
       'wind_speed',
       'city',
       'country',
+      'icon',
       'datetime',
     ];
 }
