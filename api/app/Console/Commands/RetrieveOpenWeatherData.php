@@ -2,12 +2,12 @@
 
 namespace App\Console\Commands;
 
-use App\Infrastructure\Services\OpenWeather\OpenWeatherApiClientInterface;
+use App\Jobs\OpenWeatherJob;
 use App\Models\User;
 use App\Models\Weather;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
-use Symfony\Component\HttpFoundation\ParameterBag;
+use Illuminate\Support\Facades\Bus;
 
 class RetrieveOpenWeatherData extends Command
 {
@@ -30,20 +30,13 @@ class RetrieveOpenWeatherData extends Command
      */
     public function handle(): void
     {
-        /** @var OpenWeatherApiClientInterface $openWeather */
-        $openWeather = resolve(OpenWeatherApiClientInterface::class);
-
         $users = User::query()
             ->whereNotNull('latitude')
             ->whereNotNull('longitude')
             ->get();
 
-
+        $weatherJobs = [];
         foreach ($users as $user) {
-            $parameters = new ParameterBag();
-            $parameters->set('lat', $user->latitude);
-            $parameters->set('lon', $user->longitude);
-
             $dbWeather = Weather::query()
                 ->where('user_id', $user->id)
                 ->first();
@@ -52,31 +45,12 @@ class RetrieveOpenWeatherData extends Command
                 continue;
             }
 
-            $weather = $openWeather->getWeather($parameters);
-
-            if (is_null($weather)) {
-                continue;
-            }
-
-            Weather::query()
-                ->updateOrCreate(
-                    ['user_id' => $user->id],
-                    [
-                        'user_id' => $user->id,
-                        'status' => $weather['weather'][0]['main'],
-                        'description' => $weather['weather'][0]['description'],
-                        'temperature' => $weather['main']['temp'],
-                        'temperature_min' => $weather['main']['temp_min'],
-                        'temperature_max' => $weather['main']['temp_max'],
-                        'humidity' => $weather['main']['humidity'],
-                        'visibility' => $weather['visibility'],
-                        'wind_speed' => $weather['wind']['speed'],
-                        'city' => empty($weather['name']) ? fake()->city() : $weather['name'],
-                        'country' => $weather['sys'][0]['country'] ?? fake()->countryCode(),
-                        'icon' => sprintf(config('weathers.openweather.icon'), $weather['weather'][0]['icon']),
-                        'datetime' => Carbon::parse($weather['dt'])->toDateTimeString(),
-                    ]
-                );
+            $weatherJobs[] = new OpenWeatherJob($user->id);
         }
+
+        Bus::batch($weatherJobs)
+            ->name('RetrieveOpenWeatherData::weathers-batch-jobs')
+            ->allowFailures()
+            ->dispatch();
     }
 }
