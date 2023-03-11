@@ -16,12 +16,12 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->string('status');
             $table->string('description');
-            $table->double('temperature');
-            $table->double('temperature_min');
-            $table->double('temperature_max');
+            $table->decimal('temperature', 10, 8);
+            $table->decimal('temperature_min', 10, 8);
+            $table->decimal('temperature_max', 10, 8);
             $table->integer('humidity');
             $table->integer('visibility');
-            $table->double('wind_speed');
+            $table->decimal('wind_speed', 10, 8);
             $table->string('city');
             $table->string('country');
             $table->string('icon');
