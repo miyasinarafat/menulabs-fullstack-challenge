@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Infrastructure\Persistance\UserRepositoryInterface;
+use App\Infrastructure\Persistance\WeatherRepositoryInterface;
 use App\Jobs\OpenWeatherJob;
 use App\Models\User;
 use App\Models\Weather;
@@ -33,13 +34,14 @@ class RetrieveOpenWeatherData extends Command
     {
         /** @var UserRepositoryInterface $userRepository */
         $userRepository = resolve(UserRepositoryInterface::class);
+        /** @var WeatherRepositoryInterface $weatherRepository */
+        $weatherRepository = resolve(WeatherRepositoryInterface::class);
 
         $weatherJobs = [];
         /** @var User $user */
         foreach ($userRepository->getList() as $user) {
-            $dbWeather = Weather::query()
-                ->where('user_id', $user->id)
-                ->first();
+            /** @var Weather $dbWeather */
+            $dbWeather = $weatherRepository->getByUserId($user->id);
 
             if (isset($dbWeather) && $dbWeather->updated_at >= Carbon::now()->subMinutes(45)) {
                 continue;

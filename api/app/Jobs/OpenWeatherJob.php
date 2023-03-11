@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Infrastructure\Persistance\WeatherRepositoryInterface;
 use App\Infrastructure\Services\OpenWeather\OpenWeatherApiClientInterface;
 use App\Models\Weather;
 use Carbon\Carbon;
@@ -33,6 +34,8 @@ class OpenWeatherJob implements ShouldQueue
     {
         /** @var OpenWeatherApiClientInterface $openWeather */
         $openWeather = resolve(OpenWeatherApiClientInterface::class);
+        /** @var WeatherRepositoryInterface $weatherRepository */
+        $weatherRepository = resolve(WeatherRepositoryInterface::class);
 
         $parameters = new ParameterBag();
         $parameters->set('lat', $this->latitude);
@@ -44,24 +47,22 @@ class OpenWeatherJob implements ShouldQueue
             return;
         }
 
-        Weather::query()
-            ->updateOrCreate(
-                ['user_id' => $this->userId],
-                [
-                    'user_id' => $this->userId,
-                    'status' => $weather['weather'][0]['main'],
-                    'description' => $weather['weather'][0]['description'],
-                    'temperature' => $weather['main']['temp'],
-                    'temperature_min' => $weather['main']['temp_min'],
-                    'temperature_max' => $weather['main']['temp_max'],
-                    'humidity' => $weather['main']['humidity'],
-                    'visibility' => $weather['visibility'],
-                    'wind_speed' => $weather['wind']['speed'],
-                    'city' => empty($weather['name']) ? fake()->city() : $weather['name'],
-                    'country' => $weather['sys'][0]['country'] ?? fake()->countryCode(),
-                    'icon' => sprintf(config('weathers.openweather.icon'), $weather['weather'][0]['icon']),
-                    'datetime' => Carbon::parse($weather['dt'])->toDateTimeString(),
-                ]
-            );
+        $candidateWeather = (new Weather())->fill([
+            'user_id' => $this->userId,
+            'status' => $weather['weather'][0]['main'],
+            'description' => $weather['weather'][0]['description'],
+            'temperature' => $weather['main']['temp'],
+            'temperature_min' => $weather['main']['temp_min'],
+            'temperature_max' => $weather['main']['temp_max'],
+            'humidity' => $weather['main']['humidity'],
+            'visibility' => $weather['visibility'],
+            'wind_speed' => $weather['wind']['speed'],
+            'city' => empty($weather['name']) ? fake()->city() : $weather['name'],
+            'country' => $weather['sys'][0]['country'] ?? fake()->countryCode(),
+            'icon' => sprintf(config('weathers.openweather.icon'), $weather['weather'][0]['icon']),
+            'datetime' => Carbon::parse($weather['dt'])->toDateTimeString(),
+        ]);
+
+        $weatherRepository->update($candidateWeather);
     }
 }

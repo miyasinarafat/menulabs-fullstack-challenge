@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\UserCollection;
 use App\Http\ResponseHelper;
+use App\Infrastructure\Cache\Cache;
+use App\Infrastructure\Cache\CacheTag;
 use App\Infrastructure\Persistance\UserRepositoryInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -15,6 +17,9 @@ class UserController extends Controller
      */
     public function __invoke(Request $request): JsonResponse
     {
+//        Cache::flushTagCache(CacheTag::USER);
+//        Cache::flushTagCache(CacheTag::WEATHER);
+
         /** @var UserRepositoryInterface $userRepository */
         $userRepository = resolve(UserRepositoryInterface::class);
         $users = $userRepository->getPaginationList(

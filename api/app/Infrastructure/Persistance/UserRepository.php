@@ -21,6 +21,7 @@ final class UserRepository implements UserRepositoryInterface
 
         if (! $result = Cache::readCache($cacheKey, self::CACHE_TAGS)) {
             $result = User::query()
+                ->select(['id', 'name', 'email', 'latitude', 'longitude'])
                 ->whereNotNull('latitude')
                 ->whereNotNull('longitude')
                 ->orderBy('id')
@@ -41,6 +42,7 @@ final class UserRepository implements UserRepositoryInterface
 
         if (!$result = Cache::readCache($cacheKey, self::CACHE_TAGS)) {
             $result = User::query()
+                ->select(['id', 'name', 'email', 'latitude', 'longitude'])
                 ->whereNotNull('latitude')
                 ->whereNotNull('longitude')
                 ->orderBy('id')

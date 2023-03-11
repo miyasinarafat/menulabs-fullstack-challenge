@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string country
  * @property string icon
  * @property Carbon datetime
+ * @property Carbon updated_at
  */
 class Weather extends Model
 {

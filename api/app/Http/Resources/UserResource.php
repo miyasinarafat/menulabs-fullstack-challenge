@@ -2,8 +2,8 @@
 
 namespace App\Http\Resources;
 
+use App\Infrastructure\Persistance\WeatherRepositoryInterface;
 use App\Models\User;
-use App\Models\Weather;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -19,7 +19,9 @@ class UserResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $weather = Weather::query()->where('user_id', $this->resource->id)->first();
+        /** @var WeatherRepositoryInterface $weatherRepository */
+        $weatherRepository = resolve(WeatherRepositoryInterface::class);
+        $weather = $weatherRepository->getByUserId($this->resource->id);
 
         return [
             'id' => $this->resource->id,
