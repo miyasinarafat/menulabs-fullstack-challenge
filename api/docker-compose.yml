@@ -25,6 +25,14 @@ services:
         volumes:
             - redis_data:/data
 
+    memcached:
+        image: memcached:latest
+        ports:
+            - "11211:11211"
+        volumes:
+            - memcached_data:/data
+
 volumes:
     mysql_data:
     redis_data:
+    memcached_data:
