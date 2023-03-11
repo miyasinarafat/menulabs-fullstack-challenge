@@ -26,7 +26,7 @@ final class UserRepository implements UserRepositoryInterface
                 ->orderBy('id')
                 ->get();
 
-            Cache::writePermanently($cacheKey, $result, self::CACHE_TAGS);
+            Cache::writeCache($cacheKey, $result, self::CACHE_TAGS);
         }
 
         return $result;
@@ -46,7 +46,7 @@ final class UserRepository implements UserRepositoryInterface
                 ->orderBy('id')
                 ->paginate(perPage: $perPage, page: $page);
 
-            Cache::writePermanently($cacheKey, $result, self::CACHE_TAGS);
+            Cache::writeCache($cacheKey, $result, self::CACHE_TAGS);
         }
 
         return $result;
