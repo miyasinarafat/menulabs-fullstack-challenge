@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use App\Models\Weather;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Arr;
@@ -26,6 +27,7 @@ class WeatherFactory extends Factory
     public function definition(): array
     {
         return [
+            'user_id' => User::factory()->id,
             'status' => $this->faker->randomElement(['Sunny', 'Cloudy', 'Rainy', 'Snowy']),
             'description' => $this->faker->paragraph(1),
             'temperature' => $this->faker->randomFloat(2, -120, 120),
