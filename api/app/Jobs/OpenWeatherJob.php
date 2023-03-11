@@ -3,7 +3,6 @@
 namespace App\Jobs;
 
 use App\Infrastructure\Services\OpenWeather\OpenWeatherApiClientInterface;
-use App\Models\User;
 use App\Models\Weather;
 use Carbon\Carbon;
 use Illuminate\Bus\Batchable;
@@ -23,6 +22,8 @@ class OpenWeatherJob implements ShouldQueue
      */
     public function __construct(
         public int $userId,
+        public string $latitude,
+        public string $longitude,
     ) {}
 
     /**
@@ -33,11 +34,9 @@ class OpenWeatherJob implements ShouldQueue
         /** @var OpenWeatherApiClientInterface $openWeather */
         $openWeather = resolve(OpenWeatherApiClientInterface::class);
 
-        $user = User::query()->find($this->userId);
-
         $parameters = new ParameterBag();
-        $parameters->set('lat', $user->latitude);
-        $parameters->set('lon', $user->longitude);
+        $parameters->set('lat', $this->latitude);
+        $parameters->set('lon', $this->longitude);
 
         $weather = $openWeather->getWeather($parameters);
 
@@ -47,9 +46,9 @@ class OpenWeatherJob implements ShouldQueue
 
         Weather::query()
             ->updateOrCreate(
-                ['user_id' => $user->id],
+                ['user_id' => $this->userId],
                 [
-                    'user_id' => $user->id,
+                    'user_id' => $this->userId,
                     'status' => $weather['weather'][0]['main'],
                     'description' => $weather['weather'][0]['description'],
                     'temperature' => $weather['main']['temp'],

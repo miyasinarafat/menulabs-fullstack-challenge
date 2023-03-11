@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Infrastructure\Persistance\UserRepositoryInterface;
 use App\Jobs\OpenWeatherJob;
 use App\Models\User;
 use App\Models\Weather;
@@ -30,13 +31,12 @@ class RetrieveOpenWeatherData extends Command
      */
     public function handle(): void
     {
-        $users = User::query()
-            ->whereNotNull('latitude')
-            ->whereNotNull('longitude')
-            ->get();
+        /** @var UserRepositoryInterface $userRepository */
+        $userRepository = resolve(UserRepositoryInterface::class);
 
         $weatherJobs = [];
-        foreach ($users as $user) {
+        /** @var User $user */
+        foreach ($userRepository->getList() as $user) {
             $dbWeather = Weather::query()
                 ->where('user_id', $user->id)
                 ->first();
@@ -45,7 +45,7 @@ class RetrieveOpenWeatherData extends Command
                 continue;
             }
 
-            $weatherJobs[] = new OpenWeatherJob($user->id);
+            $weatherJobs[] = new OpenWeatherJob($user->id, $user->latitude, $user->longitude);
         }
 
         Bus::batch($weatherJobs)
