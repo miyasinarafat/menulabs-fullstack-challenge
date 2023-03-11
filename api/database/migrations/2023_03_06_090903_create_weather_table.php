@@ -20,6 +20,7 @@ return new class extends Migration
             $table->double('temperature_min');
             $table->double('temperature_max');
             $table->integer('humidity');
+            $table->integer('visibility');
             $table->double('wind_speed');
             $table->string('city');
             $table->string('country');

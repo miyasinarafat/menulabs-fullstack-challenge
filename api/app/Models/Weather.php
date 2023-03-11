@@ -16,6 +16,7 @@ class Weather extends Model
       'temperature_min',
       'temperature_max',
       'humidity',
+      'visibility',
       'wind_speed',
       'city',
       'country',

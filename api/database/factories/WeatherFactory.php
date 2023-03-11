@@ -32,6 +32,7 @@ class WeatherFactory extends Factory
             'temperature_min' => $this->faker->randomFloat(2, -120, 0),
             'temperature_max' => $this->faker->randomFloat(2, 0, 120),
             'humidity' => $this->faker->randomNumber(2),
+            'visibility' => $this->faker->randomNumber(2),
             'wind_speed' => $this->faker->randomNumber(2),
             'city' => $this->faker->city(),
             'country' => $this->faker->countryCode(),
