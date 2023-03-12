@@ -28,8 +28,8 @@ class PaginationCollection extends ResourceCollection
             'list' => $this->resource->getCollection(),
             'paginate' => [
                 "page" => $this->resource->currentPage(),
-                "per_page" => $this->resource->perPage(),
-                "last_page" => $this->resource->lastPage(),
+                "perPage" => $this->resource->perPage(),
+                "lastPage" => $this->resource->lastPage(),
                 "total" => $this->resource->total(),
             ],
         ];

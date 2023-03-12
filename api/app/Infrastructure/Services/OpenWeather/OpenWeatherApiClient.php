@@ -22,7 +22,7 @@ final class OpenWeatherApiClient implements OpenWeatherApiClientInterface
     {
         $response = $this->client
             ->get(sprintf(
-                '%s%s?appid=%s&lat=%s&lon=%s',
+                '%s%s?appid=%s&lat=%s&lon=%s&units=metric',
                 config('weathers.openweather.base_url'),
                 config('weathers.openweather.current_weather'),
                 config('weathers.openweather.api_key'),
