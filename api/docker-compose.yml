@@ -34,6 +34,14 @@ services:
         volumes:
             - memcached_data:/data
 
+    cron:
+        build:
+            context: .
+            dockerfile: ./docker/cron.Dockerfile
+        container_name: cron
+        volumes:
+            - .:/var/www/html
+
 volumes:
     mysql_data:
     redis_data:
