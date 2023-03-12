@@ -1,28 +1,12 @@
 # Fullstack Challenge
 
-## Instructions
-Using Laravel and VueJS, create an application which shows the weather for a set of users.
-- Clone this repository. 
-- Once completed, send a link of the clone repository to interviewer and let them know how long the exercise took. 
-- Update the frontend landing page to show a list of users and their current weather.
-- Clicking a user opens a modal or screen which shows that users detailed weather report.
-- Weather update should be no older than 1 hour.
-- Internal API request(s) to retrieve weather data should take no longer than 500ms. Consider that external APIs could and will take longer than this from time to time and should be accounted for. 
-- We are looking for attention to detail!
-- Instructions are purposely left somewhat open-ended to allow the developer to make some of their own decisions on implementation and design. 
-- This is not a designer test so the frontend does not have to look "good", but of course bonus points if you can make it look appealing. 
+## Demo
+### API
+<img width="1325" alt="image" src="https://user-images.githubusercontent.com/16781160/224520955-4ec73b10-ab79-4af1-8e5f-89d41d13c419.png">
 
-## Things to consider:
-- Chose your own weather api such as https://openweathermap.org/api or https://www.weather.gov/documentation/services-web-api.
-- Testability.
-- Best practices.
-- Design patterns.
-- Availability of external APIs is not guaranteed and should not cause page to crash.
-- Twenty randomized users are added via the seeder process, each having their own unique location (longitude and latitude).
-- Redis is available (Docker service) if you wish to use it.
-- Queues, workers, websockets could be useful.
-- Feel free to use a frontend UI library such as PrimeVue, Vuetify, Bootstrap, Tailwind, etc. 
-- Anything else you want to do to show off your coding chops!
+### Frontend
+![image](https://user-images.githubusercontent.com/16781160/224520992-ebc7e0b1-9ee7-4a8c-bc51-4777c33218fd.png)
+
 
 ## To run the local dev environment:
 
