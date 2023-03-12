@@ -21,6 +21,7 @@
   - Setup app key: `php artisan key:generate`
   - Migrate database: `php artisan migrate` 
   - Seed database: `php artisan db:seed`
+  - Run open weather command: `php artisan openweather:retrieve`
   - Run tests: `php artisan test`
 - Visit api: `http://localhost`
 
